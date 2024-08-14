@@ -57,8 +57,8 @@ export function SearchBar({
               </FormItem>
             )}
           />
-
           <Button
+            variant="ghost"
             size="sm"
             type="submit"
             disabled={form.formState.isSubmitting}
@@ -67,7 +67,7 @@ export function SearchBar({
             {form.formState.isSubmitting && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            <SearchIcon /> Search
+            <SearchIcon />
           </Button>
         </form>
       </Form>
