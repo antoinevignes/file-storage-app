@@ -5,12 +5,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Doc } from "../../convex/_generated/dataModel";
+import { Doc } from "../../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -18,7 +19,7 @@ import {
   FileTextIcon,
   GanttChartIcon,
   ImageIcon,
-  TextIcon,
+  StarIcon,
   TrashIcon,
 } from "lucide-react";
 import {
@@ -33,12 +34,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { ReactNode, useState } from "react";
 import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 
 function FileCardActions({ file }: { file: Doc<"files"> }) {
   const deleteFile = useMutation(api.files.deleteFile);
+  const toggleFavorite = useMutation(api.files.toggleFavorite);
   const { toast } = useToast();
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -78,11 +80,21 @@ function FileCardActions({ file }: { file: Doc<"files"> }) {
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem
+            onClick={() => {
+              toggleFavorite({
+                fileId: file._id,
+              });
+            }}
+            className="flex gap-2 items-center cursor-pointer"
+          >
+            <StarIcon className="w-4 h-4" /> Favorite
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
             onClick={() => setIsConfirmOpen(true)}
             className="flex gap-2 text-red-600 items-center cursor-pointer"
           >
-            <TrashIcon className="w-4 h-4" />
-            Delete
+            <TrashIcon className="w-4 h-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -133,3 +145,5 @@ export function FileCard({
     </Card>
   );
 }
+
+//ok
