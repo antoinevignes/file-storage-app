@@ -22,6 +22,7 @@ import {
   StarHalf,
   StarIcon,
   TrashIcon,
+  UndoIcon,
 } from "lucide-react";
 import {
   AlertDialog,
@@ -48,6 +49,7 @@ function FileCardActions({
   isFavorited: boolean;
 }) {
   const deleteFile = useMutation(api.files.deleteFile);
+  const restoreFile = useMutation(api.files.restoreFile);
   const toggleFavorite = useMutation(api.files.toggleFavorite);
   const { toast } = useToast();
 
@@ -59,8 +61,8 @@ function FileCardActions({
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              This action will mark the file for our deletion process. Files are
+              deleted periodically.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -105,15 +107,31 @@ function FileCardActions({
               </div>
             )}
           </DropdownMenuItem>
-          {/* <Protect role="org:admin" fallback={<></>}> */}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => setIsConfirmOpen(true)}
-            className="flex gap-2 text-red-600 items-center cursor-pointer"
-          >
-            <TrashIcon className="w-4 h-4" /> Delete
-          </DropdownMenuItem>
-          {/* </Protect> */}
+          <Protect role="org:admin" fallback={<></>}>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                if (file.shouldDelete) {
+                  restoreFile({
+                    fileId: file._id,
+                  });
+                } else {
+                  setIsConfirmOpen(true);
+                }
+              }}
+              className="flex gap-2 items-center cursor-pointer"
+            >
+              {file.shouldDelete ? (
+                <div className="flex gap-2 text-green-600 items-center cursor-pointer">
+                  <UndoIcon className="w-4 h-4" /> Restore
+                </div>
+              ) : (
+                <div className="flex gap-2 text-red-600 items-center cursor-pointer">
+                  <TrashIcon className="w-4 h-4" /> Delete
+                </div>
+              )}
+            </DropdownMenuItem>
+          </Protect>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
