@@ -1,3 +1,6 @@
+import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { CloudUpload } from "lucide-react";
 import Link from "next/link";
 
 export default function LandingPage() {
@@ -18,6 +21,12 @@ export default function LandingPage() {
         </div>
         <div className="mx-auto max-w-2xl py-8">
           <div className="text-center">
+            <CloudUpload
+              width="200"
+              height="200"
+              className="inline-block mb-8"
+            />
+
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
               The easiest way to upload and share files with your company
             </h1>
@@ -26,12 +35,21 @@ export default function LandingPage() {
               minute.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                href="/dashboard/files"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Get started
-              </Link>
+              <SignedIn>
+                <Link
+                  href="/dashboard/files"
+                  className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Get started
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <SignInButton>
+                  <Button className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                    Sign In
+                  </Button>
+                </SignInButton>
+              </SignedOut>
               <a
                 href="#"
                 className="text-sm font-semibold leading-6 text-gray-900"
